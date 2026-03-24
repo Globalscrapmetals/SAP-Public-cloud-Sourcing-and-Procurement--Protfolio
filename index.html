@@ -1,0 +1,1339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SAP S/4HANA Public Cloud — Sourcing & Procurement Portfolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --sap-blue: #0070f3;
+      --sap-teal: #00d4aa;
+      --sap-gold: #f5a623;
+      --sap-dark: #050d1a;
+      --sap-card: #0a1628;
+      --sap-border: rgba(0, 212, 170, 0.15);
+      --sap-text: #c8d8f0;
+      --sap-muted: #6b85a8;
+      --sap-white: #eef4ff;
+      --font-display: 'DM Serif Display', serif;
+      --font-body: 'DM Sans', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--sap-dark);
+      color: var(--sap-text);
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* ── Grid Background ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(0,112,243,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,112,243,0.04) 1px, transparent 1px);
+      background-size: 48px 48px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── Nav ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.2rem 4rem;
+      background: rgba(5,13,26,0.85);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--sap-border);
+    }
+
+    .nav-logo {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      color: var(--sap-teal);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--sap-muted);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--sap-teal); }
+
+    .nav-badge {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      background: rgba(0,212,170,0.1);
+      border: 1px solid rgba(0,212,170,0.3);
+      color: var(--sap-teal);
+      padding: 0.35rem 0.9rem;
+      border-radius: 100px;
+      letter-spacing: 0.08em;
+    }
+
+    /* ── Sections ── */
+    section {
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ── Hero ── */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 8rem 2rem 4rem;
+    }
+
+    .hero-inner {
+      max-width: 900px;
+    }
+
+    .hero-eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      letter-spacing: 0.25em;
+      color: var(--sap-teal);
+      text-transform: uppercase;
+      margin-bottom: 1.8rem;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.2s forwards;
+    }
+
+    .hero-title {
+      font-family: var(--font-display);
+      font-size: clamp(2.8rem, 6vw, 5.5rem);
+      line-height: 1.08;
+      color: var(--sap-white);
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.4s forwards;
+    }
+
+    .hero-title em {
+      font-style: italic;
+      color: var(--sap-teal);
+    }
+
+    .hero-sub {
+      font-size: 1.15rem;
+      color: var(--sap-muted);
+      max-width: 600px;
+      margin: 0 auto 3rem;
+      font-weight: 300;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.6s forwards;
+    }
+
+    .hero-certs {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 3.5rem;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.8s forwards;
+    }
+
+    .cert-pill {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      background: rgba(0,112,243,0.12);
+      border: 1px solid rgba(0,112,243,0.3);
+      border-radius: 100px;
+      padding: 0.5rem 1.2rem;
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: #7eb8ff;
+      letter-spacing: 0.03em;
+    }
+
+    .cert-pill .dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--sap-teal);
+      animation: pulse 2s infinite;
+    }
+
+    .hero-stats {
+      display: flex;
+      gap: 3rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      opacity: 0;
+      animation: fadeUp 0.8s 1s forwards;
+    }
+
+    .stat {
+      text-align: center;
+    }
+
+    .stat-num {
+      font-family: var(--font-display);
+      font-size: 2.6rem;
+      color: var(--sap-white);
+      line-height: 1;
+    }
+
+    .stat-num span { color: var(--sap-teal); }
+
+    .stat-label {
+      font-size: 0.78rem;
+      color: var(--sap-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-top: 0.3rem;
+    }
+
+    /* ── Section Header ── */
+    .section-header {
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+
+    .section-tag {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
+      color: var(--sap-teal);
+      text-transform: uppercase;
+      margin-bottom: 0.8rem;
+    }
+
+    .section-title {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 4vw, 3rem);
+      color: var(--sap-white);
+      line-height: 1.15;
+    }
+
+    .section-desc {
+      color: var(--sap-muted);
+      max-width: 580px;
+      margin: 0.8rem auto 0;
+      font-size: 0.95rem;
+    }
+
+    /* ── Container ── */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 5rem 2rem;
+    }
+
+    /* ── Cards ── */
+    .card {
+      background: var(--sap-card);
+      border: 1px solid var(--sap-border);
+      border-radius: 16px;
+      padding: 2rem;
+      transition: border-color 0.3s, transform 0.3s;
+    }
+
+    .card:hover {
+      border-color: rgba(0,212,170,0.4);
+      transform: translateY(-4px);
+    }
+
+    /* ── Domain Grid ── */
+    .domain-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .domain-card {
+      background: var(--sap-card);
+      border: 1px solid var(--sap-border);
+      border-radius: 16px;
+      padding: 2rem 2rem 2rem;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.3s, transform 0.3s;
+    }
+
+    .domain-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent-a), var(--accent-b));
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .domain-card:hover::before { opacity: 1; }
+    .domain-card:hover { border-color: rgba(0,212,170,0.3); transform: translateY(-5px); }
+
+    .domain-card.blue   { --accent-a: #0070f3; --accent-b: #00d4aa; }
+    .domain-card.teal   { --accent-a: #00d4aa; --accent-b: #0070f3; }
+    .domain-card.gold   { --accent-a: #f5a623; --accent-b: #f97316; }
+    .domain-card.purple { --accent-a: #a855f7; --accent-b: #0070f3; }
+    .domain-card.green  { --accent-a: #22c55e; --accent-b: #00d4aa; }
+
+    .domain-icon {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    .domain-title {
+      font-family: var(--font-display);
+      font-size: 1.35rem;
+      color: var(--sap-white);
+      margin-bottom: 0.5rem;
+    }
+
+    .domain-desc {
+      font-size: 0.88rem;
+      color: var(--sap-muted);
+      margin-bottom: 1.2rem;
+      line-height: 1.6;
+    }
+
+    .domain-topics {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .domain-topics li {
+      font-size: 0.82rem;
+      color: var(--sap-text);
+      padding-left: 1.1rem;
+      position: relative;
+    }
+
+    .domain-topics li::before {
+      content: '›';
+      position: absolute;
+      left: 0;
+      color: var(--sap-teal);
+      font-weight: 700;
+    }
+
+    /* ── Process Flow ── */
+    #process { background: rgba(0,112,243,0.03); }
+
+    .process-flow {
+      display: flex;
+      align-items: flex-start;
+      gap: 0;
+      overflow-x: auto;
+      padding-bottom: 1rem;
+    }
+
+    .process-step {
+      flex: 1;
+      min-width: 160px;
+      text-align: center;
+      position: relative;
+    }
+
+    .process-step:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      top: 28px;
+      right: -1px;
+      width: calc(100% - 60px);
+      height: 2px;
+      background: linear-gradient(90deg, var(--sap-teal), transparent);
+      left: 60%;
+    }
+
+    .step-circle {
+      width: 56px; height: 56px;
+      border-radius: 50%;
+      background: rgba(0,212,170,0.1);
+      border: 2px solid rgba(0,212,170,0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 0.8rem;
+      font-size: 1.3rem;
+      transition: background 0.3s, border-color 0.3s;
+    }
+
+    .process-step:hover .step-circle {
+      background: rgba(0,212,170,0.2);
+      border-color: var(--sap-teal);
+    }
+
+    .step-num {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      color: var(--sap-teal);
+      letter-spacing: 0.15em;
+      margin-bottom: 0.3rem;
+    }
+
+    .step-name {
+      font-weight: 600;
+      font-size: 0.85rem;
+      color: var(--sap-white);
+      margin-bottom: 0.3rem;
+    }
+
+    .step-detail {
+      font-size: 0.75rem;
+      color: var(--sap-muted);
+      line-height: 1.5;
+    }
+
+    /* ── Config Table ── */
+    .config-section {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+
+    @media (max-width: 768px) {
+      .config-section { grid-template-columns: 1fr; }
+    }
+
+    .config-card {
+      background: var(--sap-card);
+      border: 1px solid var(--sap-border);
+      border-radius: 14px;
+      overflow: hidden;
+    }
+
+    .config-card-header {
+      padding: 1rem 1.5rem;
+      background: rgba(0,112,243,0.08);
+      border-bottom: 1px solid var(--sap-border);
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+    }
+
+    .config-card-header h3 {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--sap-white);
+    }
+
+    .config-items {
+      padding: 1rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+
+    .config-item {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      font-size: 0.83rem;
+      color: var(--sap-text);
+    }
+
+    .config-item .tag {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      background: rgba(0,112,243,0.15);
+      color: #7eb8ff;
+      padding: 0.2rem 0.6rem;
+      border-radius: 4px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .config-item .tag.green { background: rgba(34,197,94,0.12); color: #86efac; }
+    .config-item .tag.gold  { background: rgba(245,166,35,0.12); color: #fcd34d; }
+    .config-item .tag.teal  { background: rgba(0,212,170,0.12); color: #5eead4; }
+
+    /* ── Workflow ── */
+    .workflow-diagram {
+      background: var(--sap-card);
+      border: 1px solid var(--sap-border);
+      border-radius: 16px;
+      padding: 2.5rem;
+      margin-top: 2rem;
+    }
+
+    .workflow-title {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--sap-teal);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 2rem;
+    }
+
+    .wf-row {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.2rem;
+      flex-wrap: wrap;
+    }
+
+    .wf-box {
+      background: rgba(0,112,243,0.1);
+      border: 1px solid rgba(0,112,243,0.25);
+      border-radius: 8px;
+      padding: 0.6rem 1.2rem;
+      font-size: 0.82rem;
+      color: #7eb8ff;
+      font-weight: 500;
+      white-space: nowrap;
+    }
+
+    .wf-box.teal {
+      background: rgba(0,212,170,0.1);
+      border-color: rgba(0,212,170,0.25);
+      color: var(--sap-teal);
+    }
+
+    .wf-box.gold {
+      background: rgba(245,166,35,0.1);
+      border-color: rgba(245,166,35,0.25);
+      color: #fcd34d;
+    }
+
+    .wf-arrow {
+      color: var(--sap-muted);
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+
+    .wf-label {
+      font-size: 0.72rem;
+      color: var(--sap-muted);
+      margin-left: 0.3rem;
+    }
+
+    /* ── Skills Grid ── */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 1.2rem;
+    }
+
+    .skill-item {
+      background: var(--sap-card);
+      border: 1px solid var(--sap-border);
+      border-radius: 12px;
+      padding: 1.2rem 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      transition: border-color 0.2s;
+    }
+
+    .skill-item:hover { border-color: rgba(0,212,170,0.35); }
+
+    .skill-icon { font-size: 1.4rem; flex-shrink: 0; }
+
+    .skill-text { flex: 1; }
+
+    .skill-name {
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--sap-white);
+      margin-bottom: 0.15rem;
+    }
+
+    .skill-cat {
+      font-size: 0.72rem;
+      color: var(--sap-muted);
+    }
+
+    .skill-bar-wrap {
+      width: 52px;
+      height: 4px;
+      background: rgba(255,255,255,0.06);
+      border-radius: 2px;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .skill-bar {
+      height: 100%;
+      border-radius: 2px;
+      background: linear-gradient(90deg, var(--sap-blue), var(--sap-teal));
+    }
+
+    /* ── Footer ── */
+    footer {
+      border-top: 1px solid var(--sap-border);
+      padding: 2.5rem 4rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .footer-left {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--sap-muted);
+      letter-spacing: 0.1em;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 1.5rem;
+      list-style: none;
+    }
+
+    .footer-links a {
+      font-size: 0.8rem;
+      color: var(--sap-muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover { color: var(--sap-teal); }
+
+    /* ── Divider ── */
+    .divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--sap-border), transparent);
+      margin: 0 4rem;
+    }
+
+    /* ── Animations ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0.4; }
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 768px) {
+      nav { padding: 1rem 1.5rem; }
+      .nav-links { display: none; }
+      .container { padding: 4rem 1.5rem; }
+      footer { padding: 2rem 1.5rem; flex-direction: column; align-items: flex-start; }
+      .process-flow { gap: 1.5rem; flex-direction: column; }
+      .process-step:not(:last-child)::after { display: none; }
+    }
+
+    /* ── Scroll reveal ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── Tabs ── */
+    .tab-bar {
+      display: flex;
+      gap: 0.5rem;
+      border-bottom: 1px solid var(--sap-border);
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .tab-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-family: var(--font-body);
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--sap-muted);
+      padding: 0.7rem 1.2rem;
+      border-bottom: 2px solid transparent;
+      transition: color 0.2s, border-color 0.2s;
+      margin-bottom: -1px;
+    }
+
+    .tab-btn.active {
+      color: var(--sap-teal);
+      border-bottom-color: var(--sap-teal);
+    }
+
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+  </style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav>
+  <div class="nav-logo">SAP · S/4HANA · Public Cloud</div>
+  <ul class="nav-links">
+    <li><a href="#domains">Domains</a></li>
+    <li><a href="#process">Process Flows</a></li>
+    <li><a href="#config">Configuration</a></li>
+    <li><a href="#workflow">Workflows</a></li>
+    <li><a href="#skills">Skills</a></li>
+  </ul>
+  <div class="nav-badge">✦ Certified</div>
+</nav>
+
+<!-- ── HERO ── -->
+<section id="hero">
+  <div class="hero-inner">
+    <p class="hero-eyebrow">✦ SAP S/4HANA Public Cloud Certification Portfolio</p>
+    <h1 class="hero-title">
+      Sourcing & Procurement<br/><em>Expertise</em>
+    </h1>
+    <p class="hero-sub">
+      A comprehensive showcase of end-to-end SAP S/4HANA Public Cloud knowledge — from system configuration and master data to business process execution and flexible approval workflows.
+    </p>
+    <div class="hero-certs">
+      <div class="cert-pill"><span class="dot"></span> SAP S/4HANA Public Cloud — Sourcing & Procurement</div>
+      <div class="cert-pill"><span class="dot"></span> Business Process Configuration</div>
+      <div class="cert-pill"><span class="dot"></span> End-to-End Procurement Cycles</div>
+    </div>
+    <div class="hero-stats">
+      <div class="stat">
+        <div class="stat-num">5<span>+</span></div>
+        <div class="stat-label">Core Domains</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">30<span>+</span></div>
+        <div class="stat-label">Business Processes</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">E2E</div>
+        <div class="stat-label">Coverage</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ── DOMAINS ── -->
+<section id="domains">
+  <div class="container">
+    <div class="section-header reveal">
+      <p class="section-tag">01 — Core Domains</p>
+      <h2 class="section-title">Areas of Expertise</h2>
+      <p class="section-desc">Deep functional and technical knowledge spanning the full SAP S/4HANA Public Cloud Sourcing & Procurement landscape.</p>
+    </div>
+
+    <div class="domain-grid">
+
+      <div class="domain-card blue reveal">
+        <div class="domain-icon">🎯</div>
+        <h3 class="domain-title">Strategic Sourcing</h3>
+        <p class="domain-desc">End-to-end sourcing lifecycle from spend analysis through supplier award and contract creation.</p>
+        <ul class="domain-topics">
+          <li>RFx creation — RFI, RFP, RFQ management</li>
+          <li>Supplier bid evaluation & scoring</li>
+          <li>Reverse auctions & negotiation rounds</li>
+          <li>Award decisions & multi-lot sourcing</li>
+          <li>Supplier collaboration via portal</li>
+          <li>Sourcing project templates & re-use</li>
+        </ul>
+      </div>
+
+      <div class="domain-card teal reveal">
+        <div class="domain-icon">📦</div>
+        <h3 class="domain-title">Operational Procurement</h3>
+        <p class="domain-desc">Purchase-to-pay execution covering requisitions, orders, goods receipt, and invoice verification.</p>
+        <ul class="domain-topics">
+          <li>Purchase Requisition & PR approval</li>
+          <li>Purchase Order creation & change management</li>
+          <li>Goods Receipt (GR) & Service Entry Sheets</li>
+          <li>Invoice verification (3-way match)</li>
+          <li>Invoice parking, blocking & release</li>
+          <li>Self-Service Procurement (SSP / Shopping Cart)</li>
+        </ul>
+      </div>
+
+      <div class="domain-card gold reveal">
+        <div class="domain-icon">📋</div>
+        <h3 class="domain-title">Contract Management</h3>
+        <p class="domain-desc">Centralized contract lifecycle management with compliance tracking and release order integration.</p>
+        <ul class="domain-topics">
+          <li>Outline Agreements — Scheduling Agreements & Contracts</li>
+          <li>Value & quantity contracts</li>
+          <li>Contract release orders & call-offs</li>
+          <li>Contract compliance monitoring</li>
+          <li>Supplier contract collaboration</li>
+          <li>Contract expiry alerts & renewals</li>
+        </ul>
+      </div>
+
+      <div class="domain-card purple reveal">
+        <div class="domain-icon">⚙️</div>
+        <h3 class="domain-title">System Configuration</h3>
+        <p class="domain-desc">SAP S/4HANA Public Cloud organizational structures, master data, and configuration settings.</p>
+        <ul class="domain-topics">
+          <li>Company Code, Plant, Purchasing Org & Group setup</li>
+          <li>Material master & info record configuration</li>
+          <li>Vendor master & business partner setup</li>
+          <li>Source lists, quota arrangements</li>
+          <li>Document types, number ranges, tolerances</li>
+          <li>Account determination & valuation classes</li>
+        </ul>
+      </div>
+
+      <div class="domain-card green reveal">
+        <div class="domain-icon">🔀</div>
+        <h3 class="domain-title">Flexible Workflows & Approvals</h3>
+        <p class="domain-desc">Configurable approval frameworks with condition-based routing, escalation, and multi-step approval chains.</p>
+        <ul class="domain-topics">
+          <li>Flexible Workflow for PO, PR, Invoice</li>
+          <li>Condition-based approval routing rules</li>
+          <li>Multi-level approval hierarchies</li>
+          <li>Escalation paths & delegation setup</li>
+          <li>Ad-hoc approver insertion</li>
+          <li>Mobile approval via SAP Fiori / BTP</li>
+        </ul>
+      </div>
+
+      <div class="domain-card blue reveal">
+        <div class="domain-icon">🔗</div>
+        <h3 class="domain-title">Integration & Analytics</h3>
+        <p class="domain-desc">Cross-process integration touchpoints and embedded analytics for procurement intelligence.</p>
+        <ul class="domain-topics">
+          <li>MM–FI integration (GR/IR accounts, accruals)</li>
+          <li>MM–SD integration (stock transport orders)</li>
+          <li>Ariba Network integration (SAP Business Network)</li>
+          <li>Spend analysis & procurement dashboards</li>
+          <li>SAP Analytics Cloud reporting</li>
+          <li>Exception-based monitoring & alerts</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ── PROCESS FLOWS ── -->
+<section id="process">
+  <div class="container">
+    <div class="section-header reveal">
+      <p class="section-tag">02 — Business Processes</p>
+      <h2 class="section-title">End-to-End Process Flows</h2>
+      <p class="section-desc">Core procurement and sourcing cycles mapped to SAP S/4HANA transactions and Fiori apps.</p>
+    </div>
+
+    <div class="tab-bar reveal">
+      <button class="tab-btn active" onclick="switchTab(this, 'tab-p2p')">Purchase-to-Pay</button>
+      <button class="tab-btn" onclick="switchTab(this, 'tab-s2c')">Source-to-Contract</button>
+      <button class="tab-btn" onclick="switchTab(this, 'tab-rfx')">RFx Process</button>
+      <button class="tab-btn" onclick="switchTab(this, 'tab-inv')">Invoice Verification</button>
+    </div>
+
+    <!-- P2P -->
+    <div class="tab-panel active" id="tab-p2p">
+      <div class="process-flow">
+        <div class="process-step">
+          <div class="step-circle">🛒</div>
+          <p class="step-num">01</p>
+          <p class="step-name">Purchase Requisition</p>
+          <p class="step-detail">Created manually or via MRP. Contains material, qty, delivery date, cost centre.</p>
+        </div>
+        <div class="process-step">
+          <div class="step-circle">✅</div>
+          <p class="step-num">02</p>
+          <p class="step-name">PR Approval</p>
+          <p class="step-detail">Flexible workflow routes PR for approval based on value thresholds & org level.</p>
+        </div>
+        <div class="process-step">
+          <div class="step-circle">🔍</div>
+          <p class="step-num">03</p>
+          <p class="step-name">Source of Supply</p>
+          <p class="step-detail">System proposes vendor via source list, info record, or contract.</p>
+        </div>
+        <div class="process-step">
+          <div class="step-circle">📄</div>
+          <p class="step-num">04</p>
+          <p class="step-name">Purchase Order</p>
+          <p class="step-detail">PO created from PR or manually. Includes account assignment, delivery terms.</p>
+        </div>
+        <div class="process-step">
+          <div class="step-circle">🚚</div>
+          <p class="step-num">05</p>
+          <p class="step-name">Goods Receipt</p>
+          <p class="step-detail">GR posted against PO. Inventory updated; GR/IR clearing account credited.</p>
+        </div>
+        <div class="process-step">
+          <div class="step-circle">🧾</div>
+          <p class="step-num">06</p>
+          <p class="step-name">Invoice Verification</p>
+          <p class="step-detail">Vendor invoice verified via 3-way match. Variances trigger tolerance checks.</p>
+        </div>
+        <div class="process-step">
+          <div class="step-circle">💳</div>
+          <p class="step-num">07</p>
+          <p class="step-name">Payment</p>
+          <p class="step-detail">FI posts payment run. Vendor account cleared. GR/IR reconciled.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- S2C -->
+    <div class="tab-panel" id="tab-s2c">
+      <div class="process-flow">
+        <div class="process-step">
+          <div class="step-circle">📊</div>
+          <p class="step-num">01</p>
+          <p class="step-name">Spend Analysis</p>
+          <p class="step-detail">Identify sourcing opportunities using spend data and category analysis.</p>
+        </div>
+        <div class="process-step">
+          <div class="step-circle">📁</div>
+          <p class="step-num">02</p>
+          <p class="step-name">Sourcing Project</p>
+          <p class="step-detail">Create sourcing project, define scope, timelines and team responsibilities.</p>
+        </div>
+        <div class="process-step">
+          <div class="step-circle">📮</div>
+          <p class="step-num">03</p>
+          <p class="step-name">RFx Publication</p>
+          <p class="step-detail">Publish RFI/RFQ/RFP to selected suppliers with response deadline.</p>
+        </div>
+        <div class="process-step">
+          <div class="step-circle">📥</div>
+          <p class="step-num">04</p>
+          <p class="step-name">Bid Collection</p>
+          <p class="step-detail">Supplier bids collected via portal. Buyer compares price & technical criteria.</p>
+        </div>
+        <div class="process-step">
+          <div class="step-circle">⚖️</div>
+          <p class="step-num">05</p>
+          <p class="step-name">Evaluation & Award</p>
+          <p class="step-detail">Weighted scoring. Award decision made per lot or item level.</p>
+        </div>
+        <div class="process-step">
+          <div class="step-circle">📋</div>
+          <p class="step-num">06</p>
+          <p class="step-name">Contract Creation</p>
+          <p class="step-detail">Contract auto-created from award. Terms, SLAs, and pricing embedded.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- RFx -->
+    <div class="tab-panel" id="tab-rfx">
+      <div class="process-flow">
+        <div class="process-step">
+          <div class="step-circle">📝</div>
+          <p class="step-num">01</p>
+          <p class="step-name">RFx Creation</p>
+          <p class="step-detail">Buyer creates RFI, RFP, or RFQ with line items, questionnaires, and attachments.</p>
+        </div>
+        <div class="process-step">
+          <div class="step-circle">👥</div>
+          <p class="step-num">02</p>
+          <p class="step-name">Supplier Selection</p>
+          <p class="step-detail">Invite registered or external suppliers. Define submission deadline & rules.</p>
+        </div>
+        <div class="process-step">
+          <div class="step-circle">🔔</div>
+          <p class="step-num">03</p>
+          <p class="step-name">Publish & Notify</p>
+          <p class="step-detail">Suppliers receive notification. Collaborate on Q&A during open period.</p>
+        </div>
+        <div class="process-step">
+          <div class="step-circle">📬</div>
+          <p class="step-num">04</p>
+          <p class="step-name">Bid Submission</p>
+          <p class="step-detail">Suppliers submit bids via SAP Business Network / Supplier Portal.</p>
+        </div>
+        <div class="process-step">
+          <div class="step-circle">🏆</div>
+          <p class="step-num">05</p>
+          <p class="step-name">Compare & Award</p>
+          <p class="step-detail">Side-by-side bid comparison. Award complete, partial, or split across suppliers.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Invoice -->
+    <div class="tab-panel" id="tab-inv">
+      <div class="process-flow">
+        <div class="process-step">
+          <div class="step-circle">📩</div>
+          <p class="step-num">01</p>
+          <p class="step-name">Invoice Receipt</p>
+          <p class="step-detail">Invoice received via EDI, email, or manual entry in MIRO / Fiori.</p>
+        </div>
+        <div class="process-step">
+          <div class="step-circle">🔗</div>
+          <p class="step-num">02</p>
+          <p class="step-name">PO Reference</p>
+          <p class="step-detail">Invoice matched to Purchase Order and Goods Receipt (3-way match).</p>
+        </div>
+        <div class="process-step">
+          <div class="step-circle">⚠️</div>
+          <p class="step-num">03</p>
+          <p class="step-name">Tolerance Check</p>
+          <p class="step-detail">System checks price, quantity & delivery variances against tolerance limits.</p>
+        </div>
+        <div class="process-step">
+          <div class="step-circle">🔒</div>
+          <p class="step-num">04</p>
+          <p class="step-name">Block / Park</p>
+          <p class="step-detail">Invoices with exceptions are blocked or parked. Buyer reviews & resolves.</p>
+        </div>
+        <div class="process-step">
+          <div class="step-circle">✅</div>
+          <p class="step-num">05</p>
+          <p class="step-name">Release & Post</p>
+          <p class="step-detail">Approved invoices posted to FI. Vendor liability created for payment.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ── CONFIGURATION ── -->
+<section id="config">
+  <div class="container">
+    <div class="section-header reveal">
+      <p class="section-tag">03 — System Configuration</p>
+      <h2 class="section-title">Configuration Knowledge</h2>
+      <p class="section-desc">Hands-on understanding of SAP S/4HANA Public Cloud configuration — org structures, master data, and procurement settings.</p>
+    </div>
+
+    <div class="config-section reveal">
+
+      <div class="config-card">
+        <div class="config-card-header">
+          <span>🏢</span>
+          <h3>Organizational Structure</h3>
+        </div>
+        <div class="config-items">
+          <div class="config-item"><span class="tag">Client</span>Highest level — single SAP system instance</div>
+          <div class="config-item"><span class="tag">Comp. Code</span>Legal entity for financial accounting</div>
+          <div class="config-item"><span class="tag">Plant</span>Operational unit for procurement & inventory</div>
+          <div class="config-item"><span class="tag">Purch. Org</span>Negotiating unit responsible for vendor contracts</div>
+          <div class="config-item"><span class="tag">Purch. Grp</span>Buyer group for day-to-day PO processing</div>
+          <div class="config-item"><span class="tag">Storage Loc.</span>Physical storage location within a plant</div>
+        </div>
+      </div>
+
+      <div class="config-card">
+        <div class="config-card-header">
+          <span>📂</span>
+          <h3>Master Data Objects</h3>
+        </div>
+        <div class="config-items">
+          <div class="config-item"><span class="tag green">Material</span>Product master with MRP, purchasing & accounting views</div>
+          <div class="config-item"><span class="tag green">Vendor</span>Business Partner (BP) with purchasing data & payment terms</div>
+          <div class="config-item"><span class="tag green">Info Record</span>Vendor-material pricing & delivery condition record</div>
+          <div class="config-item"><span class="tag green">Source List</span>Approved vendor list per material/plant</div>
+          <div class="config-item"><span class="tag green">Quota Arrg.</span>Split procurement across multiple vendors</div>
+          <div class="config-item"><span class="tag green">Condition</span>Pricing conditions: discounts, surcharges, scales</div>
+        </div>
+      </div>
+
+      <div class="config-card">
+        <div class="config-card-header">
+          <span>📄</span>
+          <h3>Document Configuration</h3>
+        </div>
+        <div class="config-items">
+          <div class="config-item"><span class="tag teal">Doc Type</span>PO types: NB (Standard), FO (Framework), UB (STO)</div>
+          <div class="config-item"><span class="tag teal">Num Range</span>Internal/external number assignment per doc type</div>
+          <div class="config-item"><span class="tag teal">Acct Assign</span>K (Cost Centre), A (Asset), P (Project), 1 (Sales Order)</div>
+          <div class="config-item"><span class="tag teal">Item Cat.</span>Standard, Consignment, Subcontracting, Limit</div>
+          <div class="config-item"><span class="tag teal">Tolerance</span>Price & quantity tolerance for invoice verification</div>
+          <div class="config-item"><span class="tag teal">Release Strat.</span>Release strategies for PR and PO approval</div>
+        </div>
+      </div>
+
+      <div class="config-card">
+        <div class="config-card-header">
+          <span>💡</span>
+          <h3>Key Fiori Apps Used</h3>
+        </div>
+        <div class="config-items">
+          <div class="config-item"><span class="tag gold">F1048</span>Manage Purchase Orders</div>
+          <div class="config-item"><span class="tag gold">F0842</span>Manage Purchase Requisitions</div>
+          <div class="config-item"><span class="tag gold">F1068</span>Create Supplier Invoice</div>
+          <div class="config-item"><span class="tag gold">F2142</span>Manage Supplier Invoices</div>
+          <div class="config-item"><span class="tag gold">F1062</span>Post Goods Receipt for PO</div>
+          <div class="config-item"><span class="tag gold">SOURCING</span>Sourcing & Contracting Workspace</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ── WORKFLOW ── -->
+<section id="workflow">
+  <div class="container">
+    <div class="section-header reveal">
+      <p class="section-tag">04 — Flexible Workflows</p>
+      <h2 class="section-title">Approval Process Design</h2>
+      <p class="section-desc">Configuring dynamic, rule-based approval workflows in SAP S/4HANA Public Cloud for procurement documents.</p>
+    </div>
+
+    <div class="workflow-diagram reveal">
+      <p class="workflow-title">// Purchase Order Approval — Flexible Workflow</p>
+
+      <div class="wf-row">
+        <div class="wf-box">PO Created / Changed</div>
+        <span class="wf-arrow">→</span>
+        <div class="wf-box teal">Workflow Triggered</div>
+        <span class="wf-arrow">→</span>
+        <div class="wf-box">Condition Evaluation</div>
+      </div>
+
+      <div class="wf-row" style="padding-left:2rem; border-left: 2px solid var(--sap-border); margin-left: 1rem;">
+        <div class="wf-box gold">Value &lt; $5,000</div>
+        <span class="wf-arrow">→</span>
+        <div class="wf-box">Auto-Approve</div>
+        <span class="wf-label">No approval needed</span>
+      </div>
+
+      <div class="wf-row" style="padding-left:2rem; border-left: 2px solid var(--sap-border); margin-left: 1rem;">
+        <div class="wf-box gold">$5,000 – $50,000</div>
+        <span class="wf-arrow">→</span>
+        <div class="wf-box">Line Manager</div>
+        <span class="wf-arrow">→</span>
+        <div class="wf-box teal">Approved / Rejected</div>
+      </div>
+
+      <div class="wf-row" style="padding-left:2rem; border-left: 2px solid var(--sap-border); margin-left: 1rem;">
+        <div class="wf-box gold">$50,000 – $200K</div>
+        <span class="wf-arrow">→</span>
+        <div class="wf-box">Manager → Director</div>
+        <span class="wf-arrow">→</span>
+        <div class="wf-box teal">2-Step Approval</div>
+      </div>
+
+      <div class="wf-row" style="padding-left:2rem; border-left: 2px solid var(--sap-border); margin-left: 1rem;">
+        <div class="wf-box gold">Value &gt; $200K</div>
+        <span class="wf-arrow">→</span>
+        <div class="wf-box">Manager → Director → CFO</div>
+        <span class="wf-arrow">→</span>
+        <div class="wf-box teal">3-Level Approval</div>
+      </div>
+
+      <div class="wf-row" style="margin-top:1.5rem;">
+        <div class="wf-box">Deadline Reached</div>
+        <span class="wf-arrow">→</span>
+        <div class="wf-box gold">Escalation</div>
+        <span class="wf-arrow">→</span>
+        <div class="wf-box">Next Level Approver</div>
+      </div>
+    </div>
+
+    <div class="config-section reveal" style="margin-top:1.5rem;">
+      <div class="config-card">
+        <div class="config-card-header">
+          <span>🔀</span>
+          <h3>Workflow Document Types</h3>
+        </div>
+        <div class="config-items">
+          <div class="config-item"><span class="tag teal">PR</span>Purchase Requisition approval by value & cost centre</div>
+          <div class="config-item"><span class="tag teal">PO</span>Purchase Order approval by amount & vendor risk level</div>
+          <div class="config-item"><span class="tag teal">INV</span>Invoice approval for blocked or high-value invoices</div>
+          <div class="config-item"><span class="tag teal">CONTRACT</span>Contract approval by legal & procurement leadership</div>
+          <div class="config-item"><span class="tag teal">RFx</span>Sourcing event approval before supplier publication</div>
+        </div>
+      </div>
+
+      <div class="config-card">
+        <div class="config-card-header">
+          <span>📐</span>
+          <h3>Approval Rule Conditions</h3>
+        </div>
+        <div class="config-items">
+          <div class="config-item"><span class="tag">Amount</span>Net or gross PO/PR value thresholds</div>
+          <div class="config-item"><span class="tag">Org Unit</span>Plant, company code, or purchasing org</div>
+          <div class="config-item"><span class="tag">Category</span>Material group or spend category</div>
+          <div class="config-item"><span class="tag">Vendor</span>New vendor, blocked vendor, or strategic supplier</div>
+          <div class="config-item"><span class="tag">Acct Type</span>Account assignment (CapEx vs OpEx)</div>
+          <div class="config-item"><span class="tag">Change</span>Trigger on PO changes exceeding delta threshold</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ── SKILLS ── -->
+<section id="skills">
+  <div class="container">
+    <div class="section-header reveal">
+      <p class="section-tag">05 — Technical Skills</p>
+      <h2 class="section-title">Skill Inventory</h2>
+      <p class="section-desc">Functional and technical competencies across the SAP S/4HANA Public Cloud Sourcing & Procurement suite.</p>
+    </div>
+
+    <div class="skills-grid reveal">
+      <div class="skill-item">
+        <div class="skill-icon">🎯</div>
+        <div class="skill-text">
+          <div class="skill-name">RFx Management</div>
+          <div class="skill-cat">Strategic Sourcing</div>
+        </div>
+        <div class="skill-bar-wrap"><div class="skill-bar" style="width:95%"></div></div>
+      </div>
+      <div class="skill-item">
+        <div class="skill-icon">🏆</div>
+        <div class="skill-text">
+          <div class="skill-name">Auction Management</div>
+          <div class="skill-cat">Strategic Sourcing</div>
+        </div>
+        <div class="skill-bar-wrap"><div class="skill-bar" style="width:88%"></div></div>
+      </div>
+      <div class="skill-item">
+        <div class="skill-icon">📄</div>
+        <div class="skill-text">
+          <div class="skill-name">Purchase Order Processing</div>
+          <div class="skill-cat">Operational Procurement</div>
+        </div>
+        <div class="skill-bar-wrap"><div class="skill-bar" style="width:97%"></div></div>
+      </div>
+      <div class="skill-item">
+        <div class="skill-icon">🧾</div>
+        <div class="skill-text">
+          <div class="skill-name">Invoice Verification (MIRO)</div>
+          <div class="skill-cat">Accounts Payable</div>
+        </div>
+        <div class="skill-bar-wrap"><div class="skill-bar" style="width:93%"></div></div>
+      </div>
+      <div class="skill-item">
+        <div class="skill-icon">📋</div>
+        <div class="skill-text">
+          <div class="skill-name">Contract Lifecycle Mgmt</div>
+          <div class="skill-cat">Contract Management</div>
+        </div>
+        <div class="skill-bar-wrap"><div class="skill-bar" style="width:90%"></div></div>
+      </div>
+      <div class="skill-item">
+        <div class="skill-icon">🏢</div>
+        <div class="skill-text">
+          <div class="skill-name">Org Structure Design</div>
+          <div class="skill-cat">System Configuration</div>
+        </div>
+        <div class="skill-bar-wrap"><div class="skill-bar" style="width:92%"></div></div>
+      </div>
+      <div class="skill-item">
+        <div class="skill-icon">🔀</div>
+        <div class="skill-text">
+          <div class="skill-name">Flexible Workflow Config</div>
+          <div class="skill-cat">Workflow & Approvals</div>
+        </div>
+        <div class="skill-bar-wrap"><div class="skill-bar" style="width:91%"></div></div>
+      </div>
+      <div class="skill-item">
+        <div class="skill-icon">📊</div>
+        <div class="skill-text">
+          <div class="skill-name">Master Data Management</div>
+          <div class="skill-cat">System Configuration</div>
+        </div>
+        <div class="skill-bar-wrap"><div class="skill-bar" style="width:94%"></div></div>
+      </div>
+      <div class="skill-item">
+        <div class="skill-icon">🔗</div>
+        <div class="skill-text">
+          <div class="skill-name">MM–FI Integration</div>
+          <div class="skill-cat">Cross-Module Integration</div>
+        </div>
+        <div class="skill-bar-wrap"><div class="skill-bar" style="width:87%"></div></div>
+      </div>
+      <div class="skill-item">
+        <div class="skill-icon">🌐</div>
+        <div class="skill-text">
+          <div class="skill-name">SAP Business Network</div>
+          <div class="skill-cat">Supplier Collaboration</div>
+        </div>
+        <div class="skill-bar-wrap"><div class="skill-bar" style="width:85%"></div></div>
+      </div>
+      <div class="skill-item">
+        <div class="skill-icon">📱</div>
+        <div class="skill-text">
+          <div class="skill-name">SAP Fiori Applications</div>
+          <div class="skill-cat">User Experience</div>
+        </div>
+        <div class="skill-bar-wrap"><div class="skill-bar" style="width:96%"></div></div>
+      </div>
+      <div class="skill-item">
+        <div class="skill-icon">📈</div>
+        <div class="skill-text">
+          <div class="skill-name">Spend Analytics & Reporting</div>
+          <div class="skill-cat">Analytics</div>
+        </div>
+        <div class="skill-bar-wrap"><div class="skill-bar" style="width:82%"></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-left">SAP S/4HANA Public Cloud — Sourcing & Procurement Portfolio · 2024</div>
+  <ul class="footer-links">
+    <li><a href="#hero">Back to Top</a></li>
+    <li><a href="#domains">Domains</a></li>
+    <li><a href="#skills">Skills</a></li>
+  </ul>
+</footer>
+
+<script>
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 80);
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  reveals.forEach(el => observer.observe(el));
+
+  // Tab switcher
+  function switchTab(btn, panelId) {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(panelId).classList.add('active');
+  }
+</script>
+</body>
+</html>
