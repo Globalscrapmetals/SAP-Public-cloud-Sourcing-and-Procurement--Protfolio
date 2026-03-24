@@ -46,7 +46,7 @@ This portfolio is intended for recruiters, hiring managers, and SAP project team
 | Certification | Status |
 |---|---|
 | SAP S/4HANA Public Cloud — Sourcing & Procurement | ✅ Certified |
-| Focus Areas | MM, SRM, Sourcing, Flexible Workflow |
+| Focus Areas | MM , Sourcing, Flexible Workflow |
 
 ---
 
